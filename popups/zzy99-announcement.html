@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>平台公告</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #f5f6f8;
+    color: #222;
+  }
+
+  /* ===== 遮罩 ===== */
+  .zzy-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+  }
+  .zzy-mask.hide { display: none; }
+
+  /* ===== 弹窗主体 ===== */
+  .zzy-dialog {
+    width: 100%;
+    max-width: 400px;
+    max-height: 82vh;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ===== 头部 ===== */
+  .zzy-header {
+    display: flex;
+    align-items: center;
+    padding: 18px 20px 14px;
+    flex-shrink: 0;
+  }
+  .zzy-header .zzy-bell {
+    width: 26px;
+    height: 26px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .zzy-header .zzy-title {
+    flex: 1;
+    font-size: 19px;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 0.5px;
+  }
+  .zzy-header .zzy-close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .zzy-header .zzy-close svg { width: 18px; height: 18px; }
+
+  /* ===== 内容区（可滚动） ===== */
+  .zzy-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 20px 8px;
+  }
+
+  /* 官方公告横幅 */
+  .zzy-banner {
+    background: linear-gradient(180deg, #eef3fe 0%, #e4ecfb 100%);
+    border-radius: 14px;
+    padding: 26px 16px 30px;
+    text-align: center;
+  }
+  .zzy-banner .zzy-badge {
+    display: inline-block;
+    background: #ffffff;
+    color: #3b82f6;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  .zzy-banner .zzy-banner-title {
+    margin-top: 16px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 0.5px;
+  }
+  .zzy-banner .zzy-banner-sub {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* 实名认证提示框 */
+  .zzy-notice {
+    margin-top: 16px;
+    background: #fff8e8;
+    border-left: 4px solid #f5a623;
+    border-radius: 12px;
+    padding: 16px 14px 18px;
+  }
+  .zzy-notice .zzy-notice-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #a0522d;
+    margin-bottom: 8px;
+  }
+  .zzy-notice .zzy-notice-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #666;
+  }
+
+  /* 关联平台导航 */
+  .zzy-section {
+    margin-top: 22px;
+  }
+  .zzy-section .zzy-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 6px;
+  }
+  .zzy-section .zzy-section-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  /* ===== 底部按钮 ===== */
+  .zzy-footer {
+    flex-shrink: 0;
+    padding: 18px 20px 20px;
+    text-align: center;
+  }
+  .zzy-footer .zzy-btn {
+    display: inline-block;
+    min-width: 120px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 22px;
+    background: #4a8ff5;
+    color: #ffffff;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .zzy-footer .zzy-btn:active { background: #3d7fe0; }
+</style>
+</head>
+<body>
+
+<!-- 平台公告弹窗 -->
+<div class="zzy-mask" id="zzyMask">
+  <div class="zzy-dialog" role="dialog" aria-modal="true" aria-labelledby="zzyTitle">
+
+    <div class="zzy-header">
+      <svg class="zzy-bell" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <div class="zzy-title" id="zzyTitle">平台公告</div>
+      <div class="zzy-close" id="zzyClose" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="zzy-body">
+      <div class="zzy-banner">
+        <span class="zzy-badge">官方公告</span>
+        <div class="zzy-banner-title">欢迎使用智云数卡网</div>
+        <div class="zzy-banner-sub">vip.zzy99.cn · 全天候自助下单平台</div>
+      </div>
+
+      <div class="zzy-notice">
+        <div class="zzy-notice-title">下单前请完成实名认证</div>
+        <div class="zzy-notice-text">未实名用户无法下单。初次登录显示为游客价，并非直充采购最低价；完成认证后，方可查看最优价格。</div>
+      </div>
+
+      <div class="zzy-section">
+        <div class="zzy-section-title">关联平台导航</div>
+        <div class="zzy-section-desc">统一入口，便于快速访问与业务协同。</div>
+        <!-- TODO: 原站此处下方还有内容（截图已被裁切），请按原站补充导航列表 -->
+      </div>
+    </div>
+
+    <div class="zzy-footer">
+      <button type="button" class="zzy-btn" id="zzyOk">我知道了</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    var mask = document.getElementById('zzyMask');
+    function close() { mask.classList.add('hide'); }
+    document.getElementById('zzyClose').addEventListener('click', close);
+    document.getElementById('zzyOk').addEventListener('click', close);
+  })();
+</script>
+</body>
+</html>

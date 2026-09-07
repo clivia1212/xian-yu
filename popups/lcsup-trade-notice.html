@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>平台交易须知与合规规范</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background: #f5f6f8;
+    color: #333;
+  }
+
+  /* ===== 遮罩 ===== */
+  .lc-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lc-mask.hide { display: none; }
+
+  /* ===== 弹窗主体 ===== */
+  .lc-dialog {
+    width: 80%;
+    max-width: 340px;
+    max-height: 80vh;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ===== 橙色头部 ===== */
+  .lc-header {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 16px;
+    background: linear-gradient(90deg, #ff5a1f 0%, #ff7a2b 100%);
+    flex-shrink: 0;
+  }
+  .lc-header .lc-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .lc-header .lc-icon svg { width: 18px; height: 18px; }
+  .lc-header .lc-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+  .lc-header .lc-close {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lc-header .lc-close svg { width: 14px; height: 14px; }
+
+  /* ===== 内容区（可滚动） ===== */
+  .lc-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px 0;
+  }
+
+  /* 章节标题：绿色圆形序号 + 文字 */
+  .lc-section-head {
+    display: flex;
+    align-items: center;
+    margin: 26px 0 14px;
+  }
+  .lc-section-head .lc-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #8bc34a;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .lc-section-head .lc-section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #5a9a2f;
+  }
+
+  /* 米色内容卡片 */
+  .lc-card {
+    background: #fdf8ef;
+    border: 1px solid #f2e7d3;
+    border-radius: 12px;
+    padding: 14px 14px 16px;
+  }
+  .lc-card + .lc-card { margin-top: 12px; }
+  .lc-card .lc-card-head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .lc-card .lc-card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .lc-card .lc-card-icon svg { width: 18px; height: 18px; }
+  .lc-card .lc-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #5a9a2f;
+  }
+  .lc-card p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #555;
+  }
+  .lc-card p strong {
+    font-weight: 700;
+    color: #333;
+  }
+
+  /* 截图未覆盖到的区域占位 */
+  .lc-placeholder { color: #999; }
+
+  /* ===== 底部按钮 ===== */
+  .lc-footer {
+    flex-shrink: 0;
+    padding: 16px 16px 20px;
+  }
+  .lc-footer .lc-btn {
+    display: block;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+    background: linear-gradient(90deg, #ff5a1f 0%, #ff8c1a 100%);
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 23px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lc-footer .lc-btn:active { opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<!-- 交易须知与合规规范弹窗 -->
+<div class="lc-mask" id="lcMask">
+  <div class="lc-dialog" role="dialog" aria-modal="true" aria-labelledby="lcTitle">
+
+    <div class="lc-header">
+      <div class="lc-icon">
+        <svg viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
+          <path d="M3 9v6h4l5 4V5L7 9H3z"/>
+          <path d="M16.5 12a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12z"/>
+        </svg>
+      </div>
+      <div class="lc-title" id="lcTitle">交易须知与合规规范</div>
+      <div class="lc-close" id="lcClose" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="lc-body">
+
+      <!-- 第 1 部分：原站内容在截图中已滚出视口，此处保留结构，请按原站补充 -->
+      <div class="lc-section-head" style="margin-top:6px;">
+        <span class="lc-num">1</span>
+        <span class="lc-section-title lc-placeholder">（请补充：原站第一部分标题）</span>
+      </div>
+      <div class="lc-card">
+        <p class="lc-placeholder">（请补充：原站第一部分文案，截图未显示）</p>
+      </div>
+
+      <!-- 第 2 部分：截图仅显示该段落结尾，可见文字已原样保留 -->
+      <div class="lc-section-head">
+        <span class="lc-num">2</span>
+        <span class="lc-section-title lc-placeholder">（请补充：原站第二部分标题）</span>
+      </div>
+      <div class="lc-card">
+        <p><span class="lc-placeholder">（前文截图未显示）</span>…时到账，无需人工等待，高效便捷，适配个人采购、商家批量拿货等各类场景，大幅提升交易效率。</p>
+      </div>
+
+      <!-- 第 3 部分：截图完整可见，文案 1:1 -->
+      <div class="lc-section-head">
+        <span class="lc-num">3</span>
+        <span class="lc-section-title">平台专属增值服务</span>
+      </div>
+      <div class="lc-card">
+        <div class="lc-card-head">
+          <div class="lc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 2v6M15 2v6"/>
+              <path d="M6 8h12v3a6 6 0 0 1-12 0V8z"/>
+              <path d="M12 17v5"/>
+            </svg>
+          </div>
+          <div class="lc-card-title">免费API对接服务</div>
+        </div>
+        <p>平台为合作商家、批量采购用户<strong>免费提供官方API接口对接</strong>，支持订单自动同步、批量下单、发货回调、数据查询等功能，<strong>无隐藏收费、无接入门槛</strong>，助力商家实现智能化、自动化批量交易运营。</p>
+      </div>
+
+    </div>
+
+    <div class="lc-footer">
+      <button type="button" class="lc-btn" id="lcOk">我知道了</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    var mask = document.getElementById('lcMask');
+    function close() { mask.classList.add('hide'); }
+    document.getElementById('lcClose').addEventListener('click', close);
+    document.getElementById('lcOk').addEventListener('click', close);
+    // 默认滚动到第 3 部分，与截图状态一致
+    var body = mask.querySelector('.lc-body');
+    body.scrollTop = body.scrollHeight;
+  })();
+</script>
+</body>
+</html>
