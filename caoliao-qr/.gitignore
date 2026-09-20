@@ -1,0 +1,4 @@
+# 运行产物与登录态，不要提交
+output/
+state/
+test/tmp/
